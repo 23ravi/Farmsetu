@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <h3>Weather data Form</h3>
+    </head>
+    <body>
+        <div class="container bg" style="margin-top: 0px;max-width: 1292px;">
+            <br>
+            <br>
+            <div id="search-form-container text-center" style="text-align: center;">
+                <select class="dropdown dropbtn" id="country" onClick="getRegionsList()">
+                    <option class="dropdown-content" value="-1" disabled selected>country</option>
+                    {% for country in queryset %}
+                    <option class="dropdown-content">{{country.name}}</option>
+                    {% endfor %}
+                    
+                </select>
+
+                <select class="dropdown dropbtn" id="region" name="region">
+                    <option class="dropdown-content" value="-1" disabled selected>Region</option>
+                </select>
+
+
+                    
+                
+                <select id="parameter"  name = 'parameter' class="dropdown dropbtn">
+              
+                    <option class="dropdown-content" value="-1" disabled selected>parameter</option>
+                    {% for parameter in parameter_list %}
+                    <option class="dropdown-content">{{parameter.name}}</option>
+                    {% endfor %}
+
+                  </select>
+
+                
+                <input id="year" placeholder="Year" type="number" max="2020" min="1800"/>
+
+
+                <select id="timeline"  name = 'timeline' class="dropdown dropbtn">
+              
+                    <option class="dropdown-content" value="-1" disabled selected>Timeline</option>
+                    {% for timeline in timeline_list %}
+                    <option class="dropdown-content">{{timeline}}</option>
+                    {% endfor %}
+                    
+  
+                </select>
+
+                </div>
+                <br>
+                <br>
+                <div id="search-form-container text-center" style="text-align: center;">
+                    <button class="button" onclick="send_data()"><span>Submit </span></button>
+                </div>
+                <!-- <div id="search-form-container text-center" style="text-align: center;">
+                    <button type="button" class="btn dropbtn">Add to Cart</button>
+                </div> -->
+        </div>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript">
+        </script>
+
+
+
+
+
+        <script>
+            function getRegionsList(){
+                var chosen_country_list = document.getElementById('country');
+                var SelectedCountry = chosen_country_list.options[chosen_country_list.selectedIndex].value;
+                $.ajax({type : "GET", 
+                        url: "get_regions/",
+                        data: {'country': SelectedCountry},
+                        success: function(data){
+                        var s = '<option value="-1" disabled selected>Select Region</option>';
+                        var i;
+                        for(i=0;i<data.length;i++){
+                            s += '<option value="' + data[i] + '">' + data[i]+ '</option>';
+
+                        }
+                        $("#region").html(s);          
+                    }}); 
+            }
+
+
+
+            function send_data(){
+                var chosen_country_list = document.getElementById('country');
+                var SelectedCountry = chosen_country_list.options[chosen_country_list.selectedIndex].value;
+                var chosen_region_list = document.getElementById('region');
+                var SelectedRegion = chosen_region_list.options[chosen_region_list.selectedIndex].value;
+                var chosen_parameter_list = document.getElementById('parameter');
+                var SelectedParameter = chosen_parameter_list.options[chosen_parameter_list.selectedIndex].value;
+                var chosen_timeline_list = document.getElementById('timeline');
+                var SelectedTimeline = chosen_timeline_list.options[chosen_timeline_list.selectedIndex].value;
+                var SelectedYear = document.getElementById('year').value
+                console.log(SelectedCountry,SelectedParameter,SelectedRegion,SelectedTimeline,SelectedYear)
+                $.ajax({type : "POST", 
+                        url: "get_data/",
+                        data: {'country': SelectedCountry,'region':SelectedRegion,'parameter':SelectedParameter,'timeline':SelectedTimeline,'year':SelectedYear},
+                        success: function(data){
+                            alert("Value is "+data)
+                            console.log("data came from back is ",data)
+
+                        }       
+                    }); 
+
+            }
+        </script>
+
+
+
+    </body>
+
+
+
+</html>
