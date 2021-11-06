@@ -1,8 +1,8 @@
 # Project Setup
 
 ## Case1: Docker 
-1. First load the docker image in your system
-        sudo docker load < farmsetu.tar.gz
+1. Go to Farmsetu folder where dockerfile is located and Build the docker image in your system
+         docker build -t getting-started .
 2. Run the image by doing volume mapping to the code base in your system
         sudo docker run -it --privileged --net=host -e DISPLAY=unixDISPLAY -v path_of_directory_up_to_Farmsetu_folder/:/home/Farmsetu/ image_name:tag   
 3. export the python path
